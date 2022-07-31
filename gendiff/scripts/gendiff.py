@@ -10,13 +10,14 @@ def main():
         '-f',
         '--format',
         help='set format of output',
+        default='json'
     )
     args = parser.parse_args()
     date_1 = get_data(args.first_file)
     date_2 = get_data(args.second_file)
     format_ = args.format
 
-    result = difference(date_1, date_2)
+    result = difference(date_1, date_2, format=format_)
     if format_ == 'plain':
         print('\n'.join(sorted(result)))
     else:

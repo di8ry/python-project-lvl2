@@ -16,7 +16,7 @@ def get_data(file_path):
             return yaml.load(fy, Loader=yaml.FullLoader)
 
 
-def difference(date_1, date_2, plain=True, parent=None):
+def difference(date_1, date_2, format='json', parent=None):
     result = {}
     result_plain = []
     for key in date_1:
@@ -25,33 +25,43 @@ def difference(date_1, date_2, plain=True, parent=None):
                 result[f'{key} 0'] = date_1[key]
             else:
                 if type(date_1[key]) == dict and type(date_2[key]) == dict:
-                    result[f'{key} 0'] = difference(date_1[key], date_2[key])
-                    value_1 = to_plain(date_1[key])
-                    value_2 = to_plain(date_2[key])
-                    if parent:
-                        key = parent + '.' + key
-                    result_plain += difference(value_1, value_2, parent=key)
+                    if format == 'json':
+                        result[f'{key} 0'] = difference(date_1[key], date_2[key], format='json')
+                    elif format == 'plain':
+                        # value_1 = to_plain(date_1[key])
+                        # value_2 = to_plain(date_2[key])
+                        value_1 = date_1[key]
+                        value_2 = date_2[key]
+                        if parent:
+                            key = parent + '.' + key
+                        result_plain += difference(value_1, value_2, format='plain', parent=key)
                 else:
-                    result[f'{key} 1'] = date_1[key]
-                    result[f'{key} 2'] = date_2[key]
-                    value_1 = to_plain(date_1[key])
-                    value_2 = to_plain(date_2[key])
-                    if parent:
-                        key = parent + '.' + key
-                    result_plain.append(f"Property '{key}' was updated. From {value_1} to {value_2}")
+                    if format == 'json':
+                        result[f'{key} 1'] = date_1[key]
+                        result[f'{key} 2'] = date_2[key]
+                    elif format == 'plain':
+                        value_1 = to_plain(date_1[key])
+                        value_2 = to_plain(date_2[key])
+                        if parent:
+                            key = parent + '.' + key
+                        result_plain.append(f"Property '{key}' was updated. From {value_1} to {value_2}")
         else:
-            result[f'{key} 1'] = date_1[key]
-            if parent:
-                key = parent + '.' + key
-            result_plain.append(f"Property '{key}' was removed")
+            if format == 'json':
+                result[f'{key} 1'] = date_1[key]
+            elif format == 'plain':
+                if parent:
+                    key = parent + '.' + key
+                result_plain.append(f"Property '{key}' was removed")
     for key in date_2:
         if key not in date_1:
-            result[f'{key} 2'] = date_2[key]
-            value = to_plain(date_2[key])
-            if parent:
-                key = parent + '.' + key
-            result_plain.append(f"Property '{key}' was added with value: {value}")
-    if plain:
+            if format == 'json':
+                result[f'{key} 2'] = date_2[key]
+            elif format == 'plain':
+                value = to_plain(date_2[key])
+                if parent:
+                    key = parent + '.' + key
+                result_plain.append(f"Property '{key}' was added with value: {value}")
+    if format == 'plain':
         return result_plain
     return result
 
@@ -98,8 +108,8 @@ def replace_digit(key):
 
 
 if __name__ == '__main__':
-    date_1 = get_data("file_1.json")
-    date_2 = get_data("file_2.json")
+    date_1 = get_data("simple_before.json")
+    date_2 = get_data("simple_after.json")
     result = (difference(date_1, date_2))
     print(result)
     with open('result2.txt', 'w') as f:
