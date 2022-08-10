@@ -28,6 +28,6 @@ jobs:
       - name: Publish code coverage stat
         uses: paambaati/codeclimate-action@v2.7.4
         env:
-          CC_TEST_REPORTER_ID: ecb5110b060737b269714dfc50797e86faf69d28270d10ccd996ababf606b842
+          CC_TEST_REPORTER_ID: ${{ secrets.COVERAGE }}
         with:
           coverageCommand: make cc-coverage
