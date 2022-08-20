@@ -3,3 +3,6 @@
 dist
 .coverage
 coverage.xml
+__pycache__
+result2.txt
+__init__.pyc
