@@ -1,3 +1,3 @@
-from gendiff.generate_diff import difference, get_final, get_data
+from gendiff.generate_diff import generate_diff, get_data
 
-__all__ = ('difference', 'get_final', 'get_data')
+__all__ = ('generate_diff', 'get_data')
