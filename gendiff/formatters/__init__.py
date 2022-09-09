@@ -1,10 +1,12 @@
+from gendiff.formatters import stylish, json, plain
+
+
 def formatting(format_name, diff):
-    if not format_name:
-        format_name = 'stylish'
     if format_name == 'plain':
-        return
+        return plain.render(diff)
     elif format_name == 'stylish':
-        final = get_tree(result).replace('  +', '+')
-        final = final.replace('  -', '-').replace('  0', '')
+        return stylish.render(diff)
     elif format_name == 'json':
-        return
+        return json.render(diff)
+
+    raise ValueError(f'Unknown format: {format_name}')

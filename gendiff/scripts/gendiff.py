@@ -1,16 +1,13 @@
 from gendiff.cli import parse_args
 from gendiff.generate_diff import generate_diff, get_data
-from gendiff.formatters import formatter
 
 
 def main():
     args = parse_args()
-    date_1 = args.first_file
-    date_2 = args.second_file
-    format_ = args.format
+    date_1 = get_data(args.first_file)
+    date_2 = get_data(args.second_file)
 
-    result = generate_diff(get_data(date_1), get_data(date_2), format=format_)
-    print(formatter(result, format_))
+    print(generate_diff(date_1, date_2, args.format))
 
 
 if __name__ == '__main__':
