@@ -4,7 +4,8 @@ def formatter(result, format_):
     if format_ == 'plain':
         return '\n'.join(sorted(result))
     elif format_ == 'stylish':
-        final = get_tree(result).replace('  +', '+').replace('  -', '-').replace('  0', '')
+        final = get_tree(result).replace('  +', '+')
+        final = final.replace('  -', '-').replace('  0', '')
         return final
 
 
